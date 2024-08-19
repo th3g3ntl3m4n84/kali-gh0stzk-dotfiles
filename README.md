@@ -328,10 +328,10 @@ And more.. You need to look sxhkdrc file for more.
 ## 📦 setup
 
 ### 💾 Installation:
-### 󰣇 ARCH DISTROS:
+### ```󰣇``` ARCH DISTROS:
 The installer only works for **ARCH** Linux, and based distros. For the Arch's type, goes to the original repository.
 
-###  KALI:
+### `````` KALI:
 # kali-gh0stzk-dotfiles
 ###########################################################################
 # IMPORTANT: EXECUTE A BACKUP OF THE ALL FILES THAT WILL BE REPLACED HERE #                                             
