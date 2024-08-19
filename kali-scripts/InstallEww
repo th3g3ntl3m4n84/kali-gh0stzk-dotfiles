@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+if command -v eww >/dev/null 2>&1; then
+    printf "\n%s%sEww is already installed%s\n" "${BLD}" "${CGR}" "${CNC}"
+else
+    printf "\n%s%sInstalling Eww, this could take 10 mins or more.%s\n" "${BLD}" "${CBL}" "${CNC}"
+    {
+        mkdir -p "./Resources/eww"
+        git clone https://github.com/elkowar/eww ./Resources/eww
+        cd ./Resources/eww || exit
+        sudo apt install -y cargo
+        cargo build --release --no-default-features --features x11
+        sudo install -m 755 "./target/release/eww" -t /usr/bin/
+        cd .... || exit
+        } || {
+        printf "\n%s%sFailed to install Eww. You may need to install it manually%s\n" "${BLD}" "${CRE}" "${CNC}"
+    }
+fi

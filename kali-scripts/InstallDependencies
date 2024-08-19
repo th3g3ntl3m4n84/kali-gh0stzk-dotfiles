@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+#  ██████╗ ██╗ ██████╗███████╗    ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗
+#  ██╔══██╗██║██╔════╝██╔════╝    ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
+#  ██████╔╝██║██║     █████╗      ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
+#  ██╔══██╗██║██║     ██╔══╝      ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
+#  ██║  ██║██║╚██████╗███████╗    ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
+#  ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝    ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
+#   Script to install my dotfiles
+#   Author: z0mbi3
+#   url: https://github.com/gh0stzk
+
+CRE=$(tput setaf 1)
+CYE=$(tput setaf 3)
+CGR=$(tput setaf 2)
+CBL=$(tput setaf 4)
+BLD=$(tput bold)
+CNC=$(tput sgr0)
+
+backup_folder=~/.RiceBackup
+date=$(date +%Y%m%d-%H%M%S)
+
+logo () {
+
+    local text="${1:?}"
+    echo -en "
+	               %%%
+	        %%%%%//%%%%%
+	      %%************%%%
+	  (%%//############*****%%
+	%%%%%**###&&&&&&&&&###**//
+	%%(**##&&&#########&&&##**
+	%%(**##*****#####*****##**%%%
+	%%(**##     *****     ##**
+	   //##   @@**   @@   ##//
+	     ##     **###     ##
+	     #######     #####//
+	       ###**&&&&&**###
+	       &&&         &&&
+	       &&&////   &&
+	          &&//@@@**
+	            ..***
+    z0mbi3 Dotfiles to Kali Linux\n\n"
+    printf ' %s [%s%s %s%s %s]%s\n\n' "${CRE}" "${CNC}" "${CYE}" "${text}" "${CNC}" "${CRE}" "${CNC}"
+}
+
+home_dir=$HOME
+current_dir=$(pwd)
+
+logo "Welcome to z0mbi3 Dotfiles to Kali Linux"
+printf '%s%sThis script will check if you have the necessary dependencies, and if not, it will install them. Then, you can install the dotfiles to have the z0mbi3 configuration' "${BLD}" "${CRE}" "${CNC}"
+
+while true; do
+    read -rp " Do you wish to continue? [y/N]: " yn
+    case $yn in
+        [Yy]* ) break ;;
+        [Nn]* ) exit ;;
+        * ) printf " Error: just write 'y' or 'n'\n\n" ;;
+    esac
+done
+clear
+
+echo "Installing dependencies"
+sudo apt update
+
+packages=("alacritty" "brightnessctl" "bspwm" "dunst" "kitty" "imagemagick" "jq" "lsd" "maim" "mpc" "mpd" "ncmpcpp"\
+         "npm" "pamixer" "feh" "papirus-icon-theme" "physlock" "picom" "playerctl" "polybar" "ranger" "redshift" "rofi" \
+         "sxhkd" "tmux" "ueberzug" "webp-pixbuf-loader" "xclip" "xdg-user-dirs" "xdo" "xdotool" "x11-xserver-utils"\
+          "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting" "jgmenu" "pkg-config" "build-essential" "libgtk-3-dev" \
+          "libdbusmenu-glib-dev" "libdbusmenu-gtk3-dev")
+
+for package in "${packages[@]}"; do
+    if ! sudo apt install -y "$package"; then
+        echo "Failed to install package: $package , Probably you need to install it manually"
+    fi
+done
+
+pip="PyGObject"
+
+## ------------------- install pip packages ------------------- ##
+echo "Installing pip packages"
+pip install $pip
+
+## ------------------- install fonts ------------------- ##
+echo "Installing Fonts"
+mkdir -p ~/.local/share/fonts
+mkdir -p ./Resources/Fonts
+
+fonts="fonts-inconsolata fonts-jetbrains-mono fonts-terminus"
+sudo apt install -y $fonts
+
+sudo apt install -y unzip
+wget -q --show-progress https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip -O ./Resources/Fonts/JetBrains.zip
+wget -q --show-progress https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Terminus.zip -O ./Resources/Fonts/Terminus.zip
+wget -q --show-progress https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Inconsolata.zip -O ./Resources/Fonts/Inconsolata.zip
+unzip -q ./Resources/Fonts/JetBrains.zip -d ~/.local/share/fonts
+unzip -q ./Resources/Fonts/Terminus.zip -d ~/.local/share/fonts
+unzip -q ./Resources/Fonts/Inconsolata.zip -d ~/.local/share/fonts
+fc-cache -f -v
+
+## ------------------- install neovim ------------------- ##
+echo "Installing Neovim"
+mkdir -p ./Resources/Neovim
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz -o ./Resources/Neovim/nvim-linux64.tar.gz
+sudo rm -rf /opt/nvim
+sudo tar xzf ./Resources/Neovim/nvim-linux64.tar.gz -C /opt
+export PATH="$PATH:/opt/nvim-linux64/bin"
+
+## ------------------- install libwebp ------------------- ##
+echo "Installing libwebp"
+mkdir -p ./Resources/libwebp
+curl -O https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.4.0-linux-x86-64.tar.gz -o ./Resources/libwebp-1.4.0-linux-x86-64.tar.gz
+tar -xvf ./Resources/libwebp-1.4.0-linux-x86-64.tar.gz -C ./Resources
+sudo cp ./Resources/libwebp-1.4.0-linux-x86-64/* /usr/local
+
+#------------------- install rust ------------------- ##
+echo "Installing Rust"
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+echo "installing Eww, tdrop & xqp"
+
+if command -v xqp >/dev/null 2>&1; then
+    printf "\n%s%xqp is already installed%s\n" "${BLD}" "${CGR}" "${CNC}"
+else
+    printf "\n%s%sInstalling xqp, this should be fast!%s\n" "${BLD}" "${CBL}" "${CNC}"
+    git clone https://github.com/baskerville/xqp.git ./Resources/xqp
+    cd ./Resources/xqp || exit
+    sudo make
+    sudo make install
+    cd ../../ || exit
+fi
+
+if command -v tdrop >/dev/null 2>&1; then
+    printf "\n%s%sTdrop is already installed%s\n" "${BLD}" "${CGR}" "${CNC}"
+else
+    printf "\n%s%sInstalling tdrop, this should be fast!%s\n" "${BLD}" "${CBL}" "${CNC}"
+    git clone https://github.com/noctuid/tdrop.git ./Resources/tdrop
+    cd ./Resources/tdrop || exit
+    sudo make install
+    cd ../../ || exit
+fi
+
+echo "You need to install Eww manually, you can find the instructions in the eww repository, or you can use the script into the folder"
+echo "Independece installed"

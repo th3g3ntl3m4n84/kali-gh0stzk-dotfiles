@@ -1,0 +1,91 @@
+#!/bin/bash
+##########################################
+echo -e "*** Created by th3g3nl3m4n ***"
+echo -e "[+] Checking if the current directory is the home user directory..."
+current_dir=$(pwd)
+if [[ "$current_dir" != "$HOME" ]]; then
+	echo -e "[+] Enter in the home user directory..."
+	cd ~/
+	current_dir=$(pwd)
+	echo -e "---> $current_dir... OK!"
+fi
+
+if [[ -d ~/config || -d ~/.config ]]; then
+	if [[ -d ~/.config ]]; then
+		# Backup the .config current directory
+		echo -e "[+] Backuping the current ~/.config directory..."
+		mv ~/.config ~/.config_orig/
+	fi
+
+	if [[ -d ~/config ]]; then
+		# Change the name of the directory config to .config
+		echo -e "[+] Replacing the .config directory..."
+		mv ~/config ~/.config
+	else
+		echo -e "[-] The installation of the kali scripts failed!"
+		exit 1
+	fi
+
+	# Copy the h4ck3r theme dir from the original repository to the right folder
+	if [[ ! -d ~/dotfiles ]]; then
+		echo -e "[-] dotfiles repository doesn't exists..."
+		echo -e "[+] Cloning dotfiles repository..."
+		git clone https://github.com/gh0stzk/dotfiles.git ~/
+	fi
+
+	# If past to the if above, the repo already was cloned
+	# Just copy the h4ck3r theme dir
+	echo -e "[+] Copying the h4ck3r theme directory from the dotfiles repository..."
+	cp -r ~/dotfiles/config/bspwm/rices/h4ck3r/ ~/.config/bspwm/rices/
+
+	# Copy the config/bspwm/src from the original repo to the right folder
+	echo -e "[+] Copying the config/bspwm/src directory from the dotfiles repository..."
+	cp -r ~/dotfiles/config/bspwm/src/ ~/.config/bspwm/
+
+	# Copy the .zshrc from original repo to our home folder
+	if [[ -d ~/.zshrc ]]; then
+		echo -e "[+] Backuping the .zshrc original file"
+		mv ~/.zshrc ~/.zshrc.bkp
+	fi
+	echo -e "[+] Copying the .zshrc file from the dotfiles repository..."
+	cp ~/dotfiles/home/.zshrc ~/.zshrc
+
+	# Install eza dependencie using cargo
+	# Check if the cargo tool is installed
+	tool="cargo"
+	if ! command -v $tool &> /dev/null; then
+		echo -e "[+] Installing cargo..."
+		sudo apt install -y $tool
+	fi
+
+	# Installing eza
+	echo -e "[+] cargo is installed!"
+	echo -e "[+] Installing eza..."
+	cargo install eza
+
+	# Installing the needed ZSH Plugins
+	# zsh-autosuggestion plugin
+	cd /usr/share/zsh/plugins
+	echo -e "[+] Installing zsh-autosuggestion plugin"
+	sudo git clone https://github.com/zsh-users/zsh-autosuggestions
+	sudo chmod 755 /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+	# zsh-syntax-highlighting plugin
+	echo -e "[+] Installing zsh-syntax-highlighting plugin"
+	sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+	sudo chmod 755 /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+	# Back to the home user's directory
+	cd ~/
+
+	# Copy /misc/bin/colorscript from the original repo to ~/.local/bin/
+	echo -e "[+] Enabling colorscript..."
+	cp ~/dotfiles/misc/bin/colorscript ~/.local/bin/
+	chmod +x ~/.local/bin/colorscript
+
+	echo -e "[+] Post-Installation finished!"
+else
+	echo -e "[-] The installation of the kali scripts failed!"
+	exit 1
+fi
+
