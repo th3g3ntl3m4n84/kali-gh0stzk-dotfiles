@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #  ██████╗ ██╗ ██████╗███████╗    ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗
 #  ██╔══██╗██║██╔════╝██╔════╝    ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
 #  ██████╔╝██║██║     █████╗      ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
@@ -30,7 +30,7 @@ fi
 if [[ -d ~/.config/config ]]; then
 	# Change the name of the directory config to .config
 	echo -e "[+] Replacing the .config directory..."
-	cp -r ~/.config/config ~/.config
+	cp -r ~/.config/config/* ~/.config/
 else
 	echo -e "[-] The installation of the kali scripts failed!"
 	exit 1
@@ -40,7 +40,7 @@ fi
 if [[ ! -d ~/dotfiles ]]; then
 	echo -e "[-] dotfiles repository doesn't exists..."
 	echo -e "[+] Cloning dotfiles repository..."
-	git clone https://github.com/gh0stzk/dotfiles.git ~/
+	git clone https://github.com/gh0stzk/dotfiles.git
 fi
 
 # If past to the if above, the repo already was cloned
@@ -77,23 +77,23 @@ cargo install eza
 # Installing the needed ZSH Plugins
 # zsh-autosuggestion plugin
 if [[ ! -d /usr/share/zsh/plugins ]]; then
-	mkdir /usr/share/zsh/plugins
+	sudo mkdir /usr/share/zsh/plugins
 fi
 
 cd /usr/share/zsh/plugins
-echo -e "[+] Installing zsh-autosuggestion plugin"
-git clone https://github.com/zsh-users/zsh-autosuggestions
-chmod 755 /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+echo -e "[+] Installing zsh-autosuggestion plugin... "
+sudo git clone https://github.com/zsh-users/zsh-autosuggestions
+sudo chmod 755 /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # zsh-syntax-highlighting plugin
 echo -e "[+] Installing zsh-syntax-highlighting plugin"
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-chmod 755 /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+sudo chmod 755 /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # zsh-history-substring-search plugin
 echo -e "[+] Installing zsh-history-substring-search plugin... "
-git clone https://github.com/zsh-users/zsh-history-substring-search
-chmod 755 git clone https://github.com/zsh-users/zsh-history-substring-search/zsh-history-substring-search.zsh
+sudo git clone https://github.com/zsh-users/zsh-history-substring-search
+sudo chmod 755 git clone https://github.com/zsh-users/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # Back to the home user's directory
 cd ~/
