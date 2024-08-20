@@ -10,21 +10,20 @@ if [[ "$current_dir" != "$HOME" ]]; then
 	echo -e "---> $current_dir... OK!"
 fi
 
-if [[ -d ~/config || -d ~/.config ]]; then
-	if [[ -d ~/.config ]]; then
-		# Backup the .config current directory
-		echo -e "[+] Backuping the current ~/.config directory..."
-		mv ~/.config ~/.config_orig/
-	fi
+if [[ -d ~/.config ]]; then
+	# Backup the .config current directory
+	echo -e "[+] Backuping the current ~/.config directory..."
+	cp -r ~/.config ~/.config_orig/
+fi
 
-	if [[ -d ~/config ]]; then
-		# Change the name of the directory config to .config
-		echo -e "[+] Replacing the .config directory..."
-		mv ~/config ~/.config
-	else
-		echo -e "[-] The installation of the kali scripts failed!"
-		exit 1
-	fi
+if [[ -d ~/.config/config ]]; then
+	# Change the name of the directory config to .config
+	echo -e "[+] Replacing the .config directory..."
+	cp -r ~/.config/config ~/.config
+else
+	echo -e "[-] The installation of the kali scripts failed!"
+	exit 1
+fi
 
 # Copy the h4ck3r theme dir from the original repository to the right folder
 if [[ ! -d ~/dotfiles ]]; then
