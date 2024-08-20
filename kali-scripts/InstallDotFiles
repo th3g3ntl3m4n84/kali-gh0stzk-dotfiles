@@ -102,8 +102,8 @@ else
 fi
 
 chmod u+x ~/.config/bspwm/bspwmrc
-#chmod u+x ~/.config/bspwm/sxhkdrc
-chmod u+x ~/.config/sxhkd/sxhkdrc
+chmod u+x ~/.config/bspwm/sxhkdrc
+#chmod u+x ~/.config/sxhkd/sxhkdrc
 touch ~/.xinitrc
 echo -e "sxhkd &\nexec bspwm" > ~/.xinitrc
 
