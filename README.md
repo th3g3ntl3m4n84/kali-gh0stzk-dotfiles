@@ -358,3 +358,15 @@ If necessary, after install all the scripts in kali-scripts directory, execute t
     2- [zsh-syntax-highlighting plugin](https://github.com/zsh-users/zsh-syntax-highlighting)
     3- [zsh-git plugin](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git) - OPTIONAL
 - Copy the [colorscript](https://github.com/gh0stzk/dotfiles/blob/master/misc/bin/colorscript) from the original repository to ```/.local/bin/```;
+
+# MANUAL CONFIGURATION NEEDED
+- On ```.zshrc```, comment the lines there is calls for the pacman tool.
+
+# OPTIONAL CONFIGURATIONS
+- In my installation, I changed the alacritty font terminal from JetBrains to Iosevka.
+  - Edit file ```.config/alacritty/fonts.toml```
+  - Changed the size parameter to 11
+  - Changed the all styles' font, the family parameter, for [Iosevka Nerd Font](https://github.com/th3g3ntl3m4n84/kali-gh0stzk-dotfiles.git)
+- Changed the polybar font from JetBrains to [ShureTech Nerd Font](https://github.com/th3g3ntl3m4n84/kali-gh0stzk-dotfiles.git)
+  - Edit file ```.config/bspwm/rices/h4ck3r/config.ini```
+  - Change the parameter ```font-0``` for ```ShureTechMono Nerd Font```, and change ```pixelsize``` to 11;3.
